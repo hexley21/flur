@@ -134,7 +134,7 @@ export function useMint(tokenId: string) {
 			}));
 			const psbtHexes: string[] = responses.map((response) => response.data.psbt)
 
-			let psbtsLength = psbtHexes.length
+			const psbtsLength = psbtHexes.length
 			let signedPsbtHexes: string[]
 
 			if (psbtsLength > 1) {
@@ -158,7 +158,7 @@ export function useMint(tokenId: string) {
 			}
 
 			for (let i = 0; i < signedPsbtHexes.length; i++) {
-				const signedPsbt = Transaction.fromPSBT(Buffer.from(signedPsbtHexes[i], 'hex'))
+				const signedPsbt = Transaction.fromPSBT(new Uint8Array(Buffer.from(signedPsbtHexes[i], 'hex')))
 				const rawtx = Buffer.from(signedPsbt.extract()).toString('hex')
 
 				// leave as is, broadcasting bunch of transactions at once may result into status 426 Too Many Requests
